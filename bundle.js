@@ -9027,13 +9027,14 @@ const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]('#map')
 const g = svg.append('g');
 
 const equirectangularProjection = __WEBPACK_IMPORTED_MODULE_0_d3__["b" /* geoEquirectangular */]()
+  .rotate([-10, 0])
   .translate([width/2, height/2]);
 
 const geoPath = __WEBPACK_IMPORTED_MODULE_0_d3__["c" /* geoPath */]()
     .projection(equirectangularProjection);
 
 const color = __WEBPACK_IMPORTED_MODULE_0_d3__["f" /* scaleThreshold */]()
-    .domain([0, 2, 4, 6, 8])
+    .domain([0, 2, 4, 6, 7.5])
     .range(["#f2f0f7", "#dadaeb", "#bcbddc", "#9e9ac8", "#756bb1", "#54278f"]);
 
 function handleMouseOver(d, i) {
