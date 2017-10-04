@@ -1,4 +1,53 @@
+body, html {
+  width: 100%;
+}
+
+html {
+  background-color: #c7c7c7;
+}
+
 body {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #F6EFE8;
+  min-height:100vh;
+  font-family: 'Raleway', sans-serif;
+}
+
+h1 {
+  font-size: 30px;
+  margin: 20px 0px;
+  letter-spacing: 1px;
+}
+
+#map {
+  background-color: #c7c7c7;
+  position: relative;
+}
+
+.country {
+  stroke: #c7c7c7;
+}
+
+.tooltip {
+  background: #eee;
+  box-shadow: 0 0 5px #999999;
+  color: #333;
+  display: none;
+  font-size: 12px;
+  left: 130px;
+  opacity: 0;
+  padding: 10px;
+  position: absolute;
+  top: 95px;
+  width: 195px;
+  z-index: 10;
+}
+
+.country-label {
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 5px;
 }

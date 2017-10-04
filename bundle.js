@@ -1348,8 +1348,8 @@ function azimuthalInvert(angle) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = linearish;
-/* unused harmony export default */
+/* harmony export (immutable) */ __webpack_exports__["b"] = linearish;
+/* harmony export (immutable) */ __webpack_exports__["a"] = linear;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_d3_array__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3_interpolate__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__continuous__ = __webpack_require__(41);
@@ -3865,8 +3865,8 @@ function fitSize(projection, size, object) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["b"] = mercatorRaw;
-/* harmony export (immutable) */ __webpack_exports__["a"] = mercatorProjection;
+/* harmony export (immutable) */ __webpack_exports__["c"] = mercatorRaw;
+/* harmony export (immutable) */ __webpack_exports__["b"] = mercatorProjection;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__math__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rotation__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index__ = __webpack_require__(8);
@@ -3882,7 +3882,7 @@ mercatorRaw.invert = function(x, y) {
   return [x, 2 * Object(__WEBPACK_IMPORTED_MODULE_0__math__["d" /* atan */])(Object(__WEBPACK_IMPORTED_MODULE_0__math__["k" /* exp */])(y)) - __WEBPACK_IMPORTED_MODULE_0__math__["l" /* halfPi */]];
 };
 
-/* unused harmony default export */ var _unused_webpack_default_export = (function() {
+/* harmony default export */ __webpack_exports__["a"] = (function() {
   return mercatorProjection(mercatorRaw)
       .scale(961 / __WEBPACK_IMPORTED_MODULE_0__math__["w" /* tau */]);
 });
@@ -7032,7 +7032,7 @@ function compareIntersection(a, b) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["b"] = equirectangularRaw;
+/* harmony export (immutable) */ __webpack_exports__["a"] = equirectangularRaw;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index__ = __webpack_require__(8);
 
 
@@ -7042,7 +7042,7 @@ function equirectangularRaw(lambda, phi) {
 
 equirectangularRaw.invert = equirectangularRaw;
 
-/* harmony default export */ __webpack_exports__["a"] = (function() {
+/* unused harmony default export */ var _unused_webpack_default_export = (function() {
   return Object(__WEBPACK_IMPORTED_MODULE_0__index__["a" /* default */])(equirectangularRaw)
       .scale(152.63);
 });
@@ -9019,38 +9019,122 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const width = 1000,
   height = 650;
 
-const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]('#map')
+const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */]('#map')
   .append('svg')
   .attr('width', width)
   .attr('height', height);
 
 const g = svg.append('g');
 
-const equirectangularProjection = __WEBPACK_IMPORTED_MODULE_0_d3__["b" /* geoEquirectangular */]()
+const mercatorProjection = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* geoMercator */]()
   .rotate([-10, 0])
+  .center([0, 45])
   .translate([width/2, height/2]);
 
-const geoPath = __WEBPACK_IMPORTED_MODULE_0_d3__["c" /* geoPath */]()
-    .projection(equirectangularProjection);
+const geoPath = __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* geoPath */]()
+    .projection(mercatorProjection);
 
-const color = __WEBPACK_IMPORTED_MODULE_0_d3__["f" /* scaleThreshold */]()
-    .domain([0, 2, 4, 6, 7.5])
-    .range(["#f2f0f7", "#dadaeb", "#bcbddc", "#9e9ac8", "#756bb1", "#54278f"]);
+const color = __WEBPACK_IMPORTED_MODULE_0_d3__["i" /* scaleThreshold */]()
+    // .domain([0, 3.88, 4.18, 4.47, 4.91, 5.35, 6.14, 6.94, 7.22, 7.5])
+    .domain([3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5])
+    .range(["#045071", "#066792", "#1881AF", "#3993BA", "#5FABCB", "#FFB570", "#FF9E45", "#FF8719", "#E76F00", "#B45600"]);
+    // .range(["#044C68", "#056184", "#167AA0", "#348BAC", "#59A4C1", "#FFBA70", "#FFA646", "#FF9119", "#D36E00", "#A65600"]);
+    // .range(["#001424", "#003b6d", "#0066b5", "#009bfc", "#acdcfe", "#ffd1b5", "#ffa26b", "#ff7219", "#c33c01", "#752701"]);
+
+let happinessReport = {};
+
+let tooltip = __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */]("#map")
+                .append("div")
+                .attr("class", "tooltip");
+
+tooltip.append("div")
+       .attr("class", "country-label");
+
+tooltip.append("div")
+       .attr("class", "happiness-rank");
+
+tooltip.append("div")
+       .attr("class", "happiness-score");
+
+tooltip.append("div")
+       .attr("class", "gdp-per-capita");
+
+tooltip.append("div")
+       .attr("class", "social-support");
+
+tooltip.append("div")
+       .attr("class", "life-expectancy");
+
+tooltip.append("div")
+       .attr("class", "freedom");
+
+tooltip.append("div")
+       .attr("class", "generosity");
+
+tooltip.append("div")
+       .attr("class", "trust");
 
 function handleMouseOver(d, i) {
-  // d3.select(this)
-  // .attr('fill', "red");
-  console.log(d.properties.name);
+  __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */](this)
+    .transition()
+    .duration(500)
+    .style("cursor", "pointer");
+
+  tooltip.select(".country-label")
+    .html(d.properties.name);
+
+  tooltip.select(".happiness-rank")
+    .html("Happiness rank: " + happinessReport[d.properties.name].Happiness_Rank);
+
+  tooltip.select(".happiness-score")
+    .html("Happiness score: " + happinessReport[d.properties.name].Happiness_Score);
+
+  tooltip.select(".gdp-per-capita")
+    .html("GDP per capita: " + happinessReport[d.properties.name].GDP_per_Capita);
+
+  tooltip.select(".social-support")
+    .html("Social support: " + happinessReport[d.properties.name].Social_support);
+
+  tooltip.select(".life-expectancy")
+    .html("Healthy life expectancy: " + happinessReport[d.properties.name].Healthy_Life_Expectancy);
+
+  tooltip.select(".freedom")
+    .html("Freedom to make life choices: " + happinessReport[d.properties.name].Freedom);
+
+  tooltip.select(".generosity")
+    .html("Generosity: " + happinessReport[d.properties.name].Generosity);
+
+  tooltip.select(".trust")
+    .html("Trust: " + happinessReport[d.properties.name].Trust);
+
+  tooltip
+    .transition()
+    .duration(500)
+    .style("opacity", "1")
+    .style("display", "block");
 }
 
 function handleMouseOut(d, i) {
-  __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */](this)
-  .attr('fill', "#ccc");
+  __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */](this)
+    .transition()
+    .duration(500)
+    .style("cursor", "normal");
+
+  tooltip
+    .transition()
+    .duration(500)
+    .style("opacity", "0")
+    .style("display", "none");
 }
 
-__WEBPACK_IMPORTED_MODULE_0_d3__["e" /* queue */]()
-  .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["d" /* json */], "../data/countries.geo.json")
-  .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["a" /* csv */], "../data/world_happiness_report_2017.csv")
+function handleMouseMove(d) {
+  tooltip.style('top', (__WEBPACK_IMPORTED_MODULE_0_d3__["c" /* event */].layerY + 10) + 'px')
+    .style('left', (__WEBPACK_IMPORTED_MODULE_0_d3__["c" /* event */].layerX + 10) + 'px');
+}
+
+__WEBPACK_IMPORTED_MODULE_0_d3__["g" /* queue */]()
+  .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["f" /* json */], "../data/countries.geo.json")
+  .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["b" /* csv */], "../data/world_happiness_report_2017.csv")
   .await(ready);
 
 function ready(error, world, happiness) {
@@ -9061,19 +9145,57 @@ function ready(error, world, happiness) {
     happinessByCountry[d.Country] = Number(d.Happiness_Score);
   });
 
+  happiness.forEach(function(d) {
+    happinessReport[d.Country] = d;
+  });
+
   g.selectAll('path')
     .data(world.features)
     .enter()
     .append('path')
     .attr('fill', '#ccc')
     .attr('d', geoPath)
+    .attr("class", "country")
     .style("fill", function(d) {
 		  return color(happinessByCountry[d.properties.name]);
     })
-    .attr('stroke', '#FFF')
     .on("mouseover", handleMouseOver)
+    .on("mousemove", handleMouseMove)
     .on("mouseout", handleMouseOut);
 }
+
+const x = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* scaleLinear */]()
+    .domain([0, 1])
+    .range([0, 50]);
+
+const xAxis = __WEBPACK_IMPORTED_MODULE_0_d3__["a" /* axisBottom */](x)
+    .tickSize(13)
+    .tickValues(color.domain());
+
+const legend = __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */]("g").call(xAxis);
+
+legend.select(".domain")
+    .remove();
+
+legend.selectAll("rect")
+  .data(color.range().map(function(legendColor) {
+    let d = color.invertExtent(legendColor);
+    if (d[0] === null) d[0] = x.domain()[0];
+    if (d[1] === null) d[1] = x.domain()[1];
+    return d;
+  }))
+  .enter().insert("rect", ".tick")
+    .attr("height", 8)
+    .attr("x", function(d) { return x(d[0]); })
+    .attr("width", function(d) { return x(d[1]) - x(d[0]); })
+    .attr("fill", function(d) { return color(d[0]); });
+
+legend.append("text")
+    .attr("fill", "#000")
+    .attr("font-weight", "bold")
+    .attr("text-anchor", "start")
+    .attr("y", -6)
+    .text("Happiness Score");
 
 
 /***/ }),
@@ -9086,7 +9208,7 @@ function ready(error, world, happiness) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3_array__ = __webpack_require__(3);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_d3_axis__ = __webpack_require__(188);
-/* unused harmony namespace reexport */
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2_d3_axis__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_d3_brush__ = __webpack_require__(192);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_d3_chord__ = __webpack_require__(278);
@@ -9108,8 +9230,8 @@ function ready(error, world, happiness) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_d3_format__ = __webpack_require__(69);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_d3_geo__ = __webpack_require__(320);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_13_d3_geo__["a"]; });
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_13_d3_geo__["b"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_13_d3_geo__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_13_d3_geo__["b"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_d3_hierarchy__ = __webpack_require__(348);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_d3_interpolate__ = __webpack_require__(5);
@@ -9121,16 +9243,18 @@ function ready(error, world, happiness) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_d3_quadtree__ = __webpack_require__(67);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_d3_queue__ = __webpack_require__(377);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_19_d3_queue__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_19_d3_queue__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_d3_random__ = __webpack_require__(380);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_d3_request__ = __webpack_require__(385);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_21_d3_request__["a"]; });
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_21_d3_request__["b"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_21_d3_request__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_21_d3_request__["b"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22_d3_scale__ = __webpack_require__(392);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_22_d3_scale__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_22_d3_scale__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_22_d3_scale__["b"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23_d3_selection__ = __webpack_require__(1);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["f"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["b"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["f"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24_d3_shape__ = __webpack_require__(425);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_d3_time__ = __webpack_require__(42);
@@ -9648,7 +9772,7 @@ var dependencies = {"d3-array":"1.2.0","d3-axis":"1.0.8","d3-brush":"1.0.4","d3-
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_axis__ = __webpack_require__(189);
 /* unused harmony reexport axisTop */
 /* unused harmony reexport axisRight */
-/* unused harmony reexport axisBottom */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__src_axis__["a"]; });
 /* unused harmony reexport axisLeft */
 
 
@@ -9660,7 +9784,7 @@ var dependencies = {"d3-array":"1.2.0","d3-axis":"1.0.8","d3-brush":"1.0.4","d3-
 "use strict";
 /* unused harmony export axisTop */
 /* unused harmony export axisRight */
-/* unused harmony export axisBottom */
+/* harmony export (immutable) */ __webpack_exports__["a"] = axisBottom;
 /* unused harmony export axisLeft */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__array__ = __webpack_require__(190);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__identity__ = __webpack_require__(191);
@@ -15117,7 +15241,7 @@ function defaultLocale(definition) {
 /* unused harmony reexport geoConicEquidistant */
 /* unused harmony reexport geoConicEquidistantRaw */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__src_projection_equirectangular__ = __webpack_require__(138);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_18__src_projection_equirectangular__["a"]; });
+/* unused harmony reexport geoEquirectangular */
 /* unused harmony reexport geoEquirectangularRaw */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__src_projection_gnomonic__ = __webpack_require__(343);
 /* unused harmony reexport geoGnomonic */
@@ -15128,7 +15252,7 @@ function defaultLocale(definition) {
 /* unused harmony reexport geoProjection */
 /* unused harmony reexport geoProjectionMutator */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__src_projection_mercator__ = __webpack_require__(76);
-/* unused harmony reexport geoMercator */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_22__src_projection_mercator__["a"]; });
 /* unused harmony reexport geoMercatorRaw */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__src_projection_orthographic__ = __webpack_require__(345);
 /* unused harmony reexport geoOrthographic */
@@ -16889,7 +17013,7 @@ function conicConformalRaw(y0, y1) {
       n = y0 === y1 ? Object(__WEBPACK_IMPORTED_MODULE_0__math__["t" /* sin */])(y0) : Object(__WEBPACK_IMPORTED_MODULE_0__math__["n" /* log */])(cy0 / Object(__WEBPACK_IMPORTED_MODULE_0__math__["g" /* cos */])(y1)) / Object(__WEBPACK_IMPORTED_MODULE_0__math__["n" /* log */])(tany(y1) / tany(y0)),
       f = cy0 * Object(__WEBPACK_IMPORTED_MODULE_0__math__["p" /* pow */])(tany(y0), n) / n;
 
-  if (!n) return __WEBPACK_IMPORTED_MODULE_2__mercator__["b" /* mercatorRaw */];
+  if (!n) return __WEBPACK_IMPORTED_MODULE_2__mercator__["c" /* mercatorRaw */];
 
   function project(x, y) {
     if (f > 0) { if (y < -__WEBPACK_IMPORTED_MODULE_0__math__["l" /* halfPi */] + __WEBPACK_IMPORTED_MODULE_0__math__["i" /* epsilon */]) y = -__WEBPACK_IMPORTED_MODULE_0__math__["l" /* halfPi */] + __WEBPACK_IMPORTED_MODULE_0__math__["i" /* epsilon */]; }
@@ -16931,7 +17055,7 @@ function conicEquidistantRaw(y0, y1) {
       n = y0 === y1 ? Object(__WEBPACK_IMPORTED_MODULE_0__math__["t" /* sin */])(y0) : (cy0 - Object(__WEBPACK_IMPORTED_MODULE_0__math__["g" /* cos */])(y1)) / (y1 - y0),
       g = cy0 / n + y0;
 
-  if (Object(__WEBPACK_IMPORTED_MODULE_0__math__["a" /* abs */])(n) < __WEBPACK_IMPORTED_MODULE_0__math__["i" /* epsilon */]) return __WEBPACK_IMPORTED_MODULE_2__equirectangular__["b" /* equirectangularRaw */];
+  if (Object(__WEBPACK_IMPORTED_MODULE_0__math__["a" /* abs */])(n) < __WEBPACK_IMPORTED_MODULE_0__math__["i" /* epsilon */]) return __WEBPACK_IMPORTED_MODULE_2__equirectangular__["a" /* equirectangularRaw */];
 
   function project(x, y) {
     var gy = g - y, nx = n * x;
@@ -17118,7 +17242,7 @@ transverseMercatorRaw.invert = function(x, y) {
 };
 
 /* unused harmony default export */ var _unused_webpack_default_export = (function() {
-  var m = Object(__WEBPACK_IMPORTED_MODULE_1__mercator__["a" /* mercatorProjection */])(transverseMercatorRaw),
+  var m = Object(__WEBPACK_IMPORTED_MODULE_1__mercator__["b" /* mercatorProjection */])(transverseMercatorRaw),
       center = m.center,
       rotate = m.rotate;
 
@@ -18784,7 +18908,7 @@ var slice = [].slice;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_identity__ = __webpack_require__(394);
 /* unused harmony reexport scaleIdentity */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_linear__ = __webpack_require__(27);
-/* unused harmony reexport scaleLinear */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__src_linear__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_log__ = __webpack_require__(396);
 /* unused harmony reexport scaleLog */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_ordinal__ = __webpack_require__(146);
@@ -18798,7 +18922,7 @@ var slice = [].slice;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__src_quantize__ = __webpack_require__(399);
 /* unused harmony reexport scaleQuantize */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__src_threshold__ = __webpack_require__(400);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_8__src_threshold__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_8__src_threshold__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__src_time__ = __webpack_require__(149);
 /* unused harmony reexport scaleTime */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__src_utcTime__ = __webpack_require__(416);
@@ -19005,7 +19129,7 @@ function identity() {
     return identity().domain(domain);
   };
 
-  return Object(__WEBPACK_IMPORTED_MODULE_1__linear__["a" /* linearish */])(scale);
+  return Object(__WEBPACK_IMPORTED_MODULE_1__linear__["b" /* linearish */])(scale);
 }
 
 
@@ -19232,7 +19356,7 @@ function pow() {
     return Object(__WEBPACK_IMPORTED_MODULE_2__continuous__["a" /* copy */])(scale, pow().exponent(exponent));
   };
 
-  return Object(__WEBPACK_IMPORTED_MODULE_1__linear__["a" /* linearish */])(scale);
+  return Object(__WEBPACK_IMPORTED_MODULE_1__linear__["b" /* linearish */])(scale);
 }
 
 function sqrt() {
@@ -19354,7 +19478,7 @@ function quantize() {
         .range(range);
   };
 
-  return Object(__WEBPACK_IMPORTED_MODULE_2__linear__["a" /* linearish */])(scale);
+  return Object(__WEBPACK_IMPORTED_MODULE_2__linear__["b" /* linearish */])(scale);
 }
 
 
@@ -20021,7 +20145,7 @@ function sequential(interpolator) {
     return sequential(interpolator).domain([x0, x1]).clamp(clamp);
   };
 
-  return Object(__WEBPACK_IMPORTED_MODULE_0__linear__["a" /* linearish */])(scale);
+  return Object(__WEBPACK_IMPORTED_MODULE_0__linear__["b" /* linearish */])(scale);
 }
 
 
