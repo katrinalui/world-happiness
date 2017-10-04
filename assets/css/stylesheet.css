@@ -28,6 +28,7 @@ h1 {
 
 .country {
   stroke: #c7c7c7;
+  stroke-width: 0.7;
 }
 
 .tooltip {

@@ -9016,8 +9016,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_d3__ = __webpack_require__(170);
 
 
-const width = 1000,
-  height = 650;
+const width = 960,
+  height = 640;
 
 const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */]('#map')
   .append('svg')
@@ -9078,34 +9078,46 @@ function handleMouseOver(d, i) {
   __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */](this)
     .transition()
     .duration(500)
+    .style("stroke", "#FFCF45")
+    .style("stroke-width", 2)
     .style("cursor", "pointer");
 
+  tooltip.selectAll("div")
+    .html("");
+
+  const countryName = d.properties.name;
+
   tooltip.select(".country-label")
-    .html(d.properties.name);
+    .html(countryName);
 
-  tooltip.select(".happiness-rank")
-    .html("Happiness rank: " + happinessReport[d.properties.name].Happiness_Rank);
+  if (happinessReport[countryName]) {
+    tooltip.select(".happiness-rank")
+      .html("Happiness rank: " + happinessReport[countryName].Happiness_Rank);
 
-  tooltip.select(".happiness-score")
-    .html("Happiness score: " + happinessReport[d.properties.name].Happiness_Score);
+    tooltip.select(".happiness-score")
+      .html("Happiness score: " + happinessReport[countryName].Happiness_Score);
 
-  tooltip.select(".gdp-per-capita")
-    .html("GDP per capita: " + happinessReport[d.properties.name].GDP_per_Capita);
+    tooltip.select(".gdp-per-capita")
+      .html("GDP per capita: " + happinessReport[countryName].GDP_per_Capita);
 
-  tooltip.select(".social-support")
-    .html("Social support: " + happinessReport[d.properties.name].Social_support);
+    tooltip.select(".social-support")
+      .html("Social support: " + happinessReport[countryName].Social_support);
 
-  tooltip.select(".life-expectancy")
-    .html("Healthy life expectancy: " + happinessReport[d.properties.name].Healthy_Life_Expectancy);
+    tooltip.select(".life-expectancy")
+      .html("Healthy life expectancy: " + happinessReport[countryName].Healthy_Life_Expectancy);
 
-  tooltip.select(".freedom")
-    .html("Freedom to make life choices: " + happinessReport[d.properties.name].Freedom);
+    tooltip.select(".freedom")
+      .html("Freedom to make life choices: " + happinessReport[countryName].Freedom);
 
-  tooltip.select(".generosity")
-    .html("Generosity: " + happinessReport[d.properties.name].Generosity);
+    tooltip.select(".generosity")
+      .html("Generosity: " + happinessReport[countryName].Generosity);
 
-  tooltip.select(".trust")
-    .html("Trust: " + happinessReport[d.properties.name].Trust);
+    tooltip.select(".trust")
+      .html("Trust: " + happinessReport[countryName].Trust);
+  } else {
+    tooltip.select(".happiness-rank")
+      .html("Happiness rank: No ranking");
+  }
 
   tooltip
     .transition()
@@ -9118,6 +9130,8 @@ function handleMouseOut(d, i) {
   __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */](this)
     .transition()
     .duration(500)
+    .style("stroke", "#c7c7c7")
+    .style("stroke-width", 1)
     .style("cursor", "normal");
 
   tooltip
@@ -9153,7 +9167,7 @@ function ready(error, world, happiness) {
     .data(world.features)
     .enter()
     .append('path')
-    .attr('fill', '#ccc')
+    .attr('fill', '#e8e8e8')
     .attr('d', geoPath)
     .attr("class", "country")
     .style("fill", function(d) {
@@ -9165,11 +9179,11 @@ function ready(error, world, happiness) {
 }
 
 const x = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* scaleLinear */]()
-    .domain([0, 1])
-    .range([0, 50]);
+    .domain([2.5, 8])
+    .range([0, 400]);
 
 const xAxis = __WEBPACK_IMPORTED_MODULE_0_d3__["a" /* axisBottom */](x)
-    .tickSize(13)
+    .tickSize(10)
     .tickValues(color.domain());
 
 const legend = __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */]("g").call(xAxis);
@@ -9180,11 +9194,11 @@ legend.select(".domain")
 legend.selectAll("rect")
   .data(color.range().map(function(legendColor) {
     let d = color.invertExtent(legendColor);
-    if (d[0] === null) d[0] = x.domain()[0];
-    if (d[1] === null) d[1] = x.domain()[1];
+    if (!d[0]) d[0] = x.domain()[0];
+    if (!d[1]) d[1] = x.domain()[1];
     return d;
   }))
-  .enter().insert("rect", ".tick")
+  .enter().insert("rect", ".legend-tick")
     .attr("height", 8)
     .attr("x", function(d) { return x(d[0]); })
     .attr("width", function(d) { return x(d[1]) - x(d[0]); })
