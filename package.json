@@ -21,6 +21,7 @@
   "homepage": "https://github.com/katrinalui/world-happiness#readme",
   "dependencies": {
     "d3": "^4.10.2",
+    "d3-svg-legend": "^2.24.1",
     "webpack": "^3.6.0"
   }
 }

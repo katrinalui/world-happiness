@@ -9016,8 +9016,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_d3__ = __webpack_require__(170);
 
 
-const width = 960,
-  height = 640;
+const width = 1200,
+  height = 620;
 
 const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */]('#map')
   .append('svg')
@@ -9029,6 +9029,7 @@ const g = svg.append('g');
 const mercatorProjection = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* geoMercator */]()
   .rotate([-10, 0])
   .center([0, 45])
+  .scale(140)
   .translate([width/2, height/2]);
 
 const geoPath = __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* geoPath */]()
@@ -9037,7 +9038,7 @@ const geoPath = __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* geoPath */]()
 const color = __WEBPACK_IMPORTED_MODULE_0_d3__["i" /* scaleThreshold */]()
     // .domain([0, 3.88, 4.18, 4.47, 4.91, 5.35, 6.14, 6.94, 7.22, 7.5])
     .domain([3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5])
-    .range(["#045071", "#066792", "#1881AF", "#3993BA", "#5FABCB", "#FFB570", "#FF9E45", "#FF8719", "#E76F00", "#B45600"]);
+    .range(["#045071", "#066792", "#1881AF", "#3993BA", "#5FABCB", "#FFB570", "#FF9E45", "#FF8719", "#E76F00", "#B45600", "#833F00"]);
     // .range(["#044C68", "#056184", "#167AA0", "#348BAC", "#59A4C1", "#FFBA70", "#FFA646", "#FF9119", "#D36E00", "#A65600"]);
     // .range(["#001424", "#003b6d", "#0066b5", "#009bfc", "#acdcfe", "#ffd1b5", "#ffa26b", "#ff7219", "#c33c01", "#752701"]);
 
@@ -9077,7 +9078,7 @@ tooltip.append("div")
 function handleMouseOver(d, i) {
   __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */](this)
     .transition()
-    .duration(500)
+    .duration(300)
     .style("stroke", "#FFCF45")
     .style("stroke-width", 2)
     .style("cursor", "pointer");
@@ -9129,7 +9130,7 @@ function handleMouseOver(d, i) {
 function handleMouseOut(d, i) {
   __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */](this)
     .transition()
-    .duration(500)
+    .duration(300)
     .style("stroke", "#c7c7c7")
     .style("stroke-width", 1)
     .style("cursor", "normal");
@@ -9178,38 +9179,43 @@ function ready(error, world, happiness) {
     .on("mouseout", handleMouseOut);
 }
 
-const x = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* scaleLinear */]()
+const ticks = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* scaleLinear */]()
     .domain([2.5, 8])
-    .range([0, 400]);
+    .range([0, 280]);
 
-const xAxis = __WEBPACK_IMPORTED_MODULE_0_d3__["a" /* axisBottom */](x)
+const xAxis = __WEBPACK_IMPORTED_MODULE_0_d3__["a" /* axisBottom */](ticks)
     .tickSize(10)
     .tickValues(color.domain());
 
-const legend = __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */]("g").call(xAxis);
+const legend = svg.append("g")
+  .attr("class", "color-legend")
+  .attr("transform", "translate(55, 560)")
+  .call(xAxis);
 
 legend.select(".domain")
     .remove();
 
-legend.selectAll("rect")
-  .data(color.range().map(function(legendColor) {
-    let d = color.invertExtent(legendColor);
-    if (!d[0]) d[0] = x.domain()[0];
-    if (!d[1]) d[1] = x.domain()[1];
-    return d;
-  }))
-  .enter().insert("rect", ".legend-tick")
-    .attr("height", 8)
-    .attr("x", function(d) { return x(d[0]); })
-    .attr("width", function(d) { return x(d[1]) - x(d[0]); })
-    .attr("fill", function(d) { return color(d[0]); });
+const legendColors = function(legendColor) {
+  let d = color.invertExtent(legendColor);
+  if (!d[0]) d[0] = ticks.domain()[0];
+  if (!d[1]) d[1] = ticks.domain()[1];
+  return d;
+};
 
-legend.append("text")
-    .attr("fill", "#000")
-    .attr("font-weight", "bold")
-    .attr("text-anchor", "start")
+legend.selectAll("rect")
+  .data(color.range().map(legendColor => legendColors(legendColor)))
+  .enter().insert("rect", ".legend-tick")
+  .attr("height", 10)
+  .attr("x", function(d) { return ticks(d[0]); })
+  .attr("width", function(d) { return ticks(d[1]) - ticks(d[0]); })
+  .attr("fill", function(d) { return color(d[0]); });
+
+legend.append("div")
+    .attr("class", "legend-title")
+    // .attr("font-weight", "bold")
+    // .attr("text-anchor", "start")
     .attr("y", -6)
-    .text("Happiness Score");
+    .html("Happiness Score");
 
 
 /***/ }),
