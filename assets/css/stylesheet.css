@@ -56,8 +56,10 @@ h1 {
 
 .legend-title {
   width: fit-content;
-  color: black;
+  color: #26272B;
   position: absolute;
+  font-size: 12px;
+  font-family: 'Open Sans', sans-serif;
 }
 
 #year-slider {
@@ -69,8 +71,19 @@ h1 {
   left: 55px;
 }
 
+#selected-year {
+  position: absolute;
+  color: #26272B;
+  font-weight: bold;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  top: 490px;
+  left: 85px;
+}
+
 input[type=range]{
   -webkit-appearance: none;
+  cursor: pointer;
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -85,7 +98,7 @@ input[type=range]::-webkit-slider-thumb {
 
 input[type=range]::-webkit-slider-runnable-track {
   width: 120px;
-  height: 7px;
+  height: 5px;
   background: #e8e8e8;
   border: none;
   border-radius: 3px;

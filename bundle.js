@@ -9182,6 +9182,9 @@ const slider = __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */]("#year-slider"
   });
 
 function updateMap(year) {
+  const yearSpan = document.getElementById("selected-year");
+  yearSpan.innerText = `Year ${year}`;
+
   __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* queue */]()
   .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["b" /* csv */], `../data/world_happiness_report_${year}.csv`)
   .await(recolorMap);
@@ -9239,8 +9242,7 @@ legend.selectAll("rect")
 
 legend.append("text")
     .attr("class", "legend-title")
-    .attr("fill", "black")
-    .attr("font-size", "12px")
+    .attr("fill", "#26272B")
     .attr("font-weight", "bold")
     .attr("text-anchor", "start")
     .attr("x", 0)
