@@ -9036,13 +9036,42 @@ const geoPath = __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* geoPath */]()
     .projection(mercatorProjection);
 
 const color = __WEBPACK_IMPORTED_MODULE_0_d3__["i" /* scaleThreshold */]()
-    // .domain([0, 3.88, 4.18, 4.47, 4.91, 5.35, 6.14, 6.94, 7.22, 7.5])
     .domain([3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5])
     .range(["#045071", "#066792", "#1881AF", "#3993BA", "#5FABCB", "#FFB570", "#FF9E45", "#FF8719", "#E76F00", "#B45600", "#833F00"]);
-    // .range(["#044C68", "#056184", "#167AA0", "#348BAC", "#59A4C1", "#FFBA70", "#FFA646", "#FF9119", "#D36E00", "#A65600"]);
-    // .range(["#001424", "#003b6d", "#0066b5", "#009bfc", "#acdcfe", "#ffd1b5", "#ffa26b", "#ff7219", "#c33c01", "#752701"]);
 
 let happinessReport = {};
+
+__WEBPACK_IMPORTED_MODULE_0_d3__["g" /* queue */]()
+  .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["f" /* json */], "../data/countries.geo.json")
+  .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["b" /* csv */], `../data/world_happiness_report_2017.csv`)
+  .await(ready);
+
+function ready(error, world, happiness) {
+  if (error) throw error;
+
+  let happinessByCountry = {};
+  happiness.forEach(function(d) {
+    happinessByCountry[d.Country] = Number(d.Happiness_Score);
+  });
+
+  happiness.forEach(function(d) {
+    happinessReport[d.Country] = d;
+  });
+
+  g.selectAll('path')
+    .data(world.features)
+    .enter()
+    .append('path')
+    .attr('fill', '#e8e8e8')
+    .attr('d', geoPath)
+    .attr("class", "country")
+    .style("fill", function(d) {
+		  return color(happinessByCountry[d.properties.name]);
+    })
+    .on("mouseover", handleMouseOver)
+    .on("mousemove", handleMouseMove)
+    .on("mouseout", handleMouseOut);
+}
 
 let tooltip = __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */]("#map")
                 .append("div")
@@ -9132,7 +9161,7 @@ function handleMouseOut(d, i) {
     .transition()
     .duration(300)
     .style("stroke", "#c7c7c7")
-    .style("stroke-width", 1)
+    .style("stroke-width", 0.5)
     .style("cursor", "normal");
 
   tooltip
@@ -9147,12 +9176,18 @@ function handleMouseMove(d) {
     .style('left', (__WEBPACK_IMPORTED_MODULE_0_d3__["c" /* event */].layerX + 10) + 'px');
 }
 
-__WEBPACK_IMPORTED_MODULE_0_d3__["g" /* queue */]()
-  .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["f" /* json */], "../data/countries.geo.json")
-  .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["b" /* csv */], "../data/world_happiness_report_2017.csv")
-  .await(ready);
+const slider = __WEBPACK_IMPORTED_MODULE_0_d3__["j" /* select */]("#year-slider")
+  .on("input", function() {
+    updateMap(Number(this.value));
+  });
 
-function ready(error, world, happiness) {
+function updateMap(year) {
+  __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* queue */]()
+  .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["b" /* csv */], `../data/world_happiness_report_${year}.csv`)
+  .await(recolorMap);
+}
+
+function recolorMap(error, happiness) {
   if (error) throw error;
 
   let happinessByCountry = {};
@@ -9164,19 +9199,11 @@ function ready(error, world, happiness) {
     happinessReport[d.Country] = d;
   });
 
-  g.selectAll('path')
-    .data(world.features)
-    .enter()
-    .append('path')
+  g.selectAll('.country')
     .attr('fill', '#e8e8e8')
-    .attr('d', geoPath)
-    .attr("class", "country")
     .style("fill", function(d) {
 		  return color(happinessByCountry[d.properties.name]);
-    })
-    .on("mouseover", handleMouseOver)
-    .on("mousemove", handleMouseMove)
-    .on("mouseout", handleMouseOut);
+    });
 }
 
 const ticks = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* scaleLinear */]()

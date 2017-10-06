@@ -13,6 +13,7 @@ body {
   color: #F6EFE8;
   min-height:100vh;
   font-family: 'Raleway', sans-serif;
+  position: relative;
 }
 
 h1 {
@@ -28,7 +29,7 @@ h1 {
 
 .country {
   stroke: #c7c7c7;
-  stroke-width: 0.7;
+  stroke-width: 0.5;
 }
 
 .tooltip {
@@ -57,4 +58,35 @@ h1 {
   width: fit-content;
   color: black;
   position: absolute;
+}
+
+#year-slider {
+  direction: rtl;
+  width: 120px;
+  height: 10px;
+  position: absolute;
+  top: 490px;
+  left: 55px;
+}
+
+input[type=range]{
+  -webkit-appearance: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: none;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background-color: #E76F00;
+  margin-top: -4px;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 120px;
+  height: 7px;
+  background: #e8e8e8;
+  border: none;
+  border-radius: 3px;
 }
